@@ -12,6 +12,7 @@ import { UserFormValidation } from '@/lib/validation'
 import 'react-phone-number-input/style.css'
 import CustomFormField, { FormFieldType } from '../CustomFormField'
 import SubmitButton from '../SubmitButton'
+import { createUser } from '@/lib/actions/patient.action'
 
 const PatientForm = () => {
 	const router = useRouter()
@@ -30,12 +31,10 @@ const PatientForm = () => {
 		setIsLoading(true)
 
 		try {
-			const user = {
-				name: values.name,
-				email: values.email,
-				phone: values.phone,
-			}
-			//TODO: create user function
+			const userData = { name, email, phone }
+			const user = await createUser(userData)
+
+			if (user) router.push(`/patients/${user.$id}/register`)
 		} catch (error) {
 			console.log(error)
 		}
